@@ -1,7 +1,8 @@
 module.exports = {
 	'env': {
 		'es2021': true,
-		'node': true
+		'node': true,
+		'jest/globals': true
 	},
 	'extends': 'eslint:recommended',
 	'parserOptions': {
@@ -14,6 +15,7 @@ module.exports = {
 			'tab'
 		],
 		'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
-		'no-unused-vars': ['warn', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }]
-	}
+		'no-unused-vars': ['warn', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
+	},
+	'plugins': ['jest']
 }

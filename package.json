@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
-	"babel": "babel-node src/index.js",
-	"serve": "nodemon -L --exec npm run babel",
+    "babel": "babel-node src/index.js",
+    "serve": "nodemon -L --exec npm run babel",
     "dev": "nodemon -L --exec babel-node src/index.js",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && babel ./src -d dist",
@@ -32,6 +32,7 @@
     "@babel/preset-env": "^7.16.11",
     "@babel/runtime": "^7.17.2",
     "eslint": "^8.10.0",
+    "eslint-plugin-jest": "^26.1.1",
     "jest": "^27.5.1",
     "nodemon": "^2.0.15",
     "supertest": "^6.2.2"
