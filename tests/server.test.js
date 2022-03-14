@@ -11,12 +11,12 @@ const app = makeApp({
 
 describe('POST /api/v1/register', () => {
 	describe('Given an email, password, name and address details', () => {
-		test('should save the email and password to the database', async () => {
+		test.skip('should save the email and password to the database', async () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, null])
 			
 			const res = await request(app).post('/api/v1/register').send({
-				email: 'email',
+				email: 'example@example.com',
 				password: 'password'
 			})
 
@@ -28,13 +28,13 @@ describe('POST /api/v1/register', () => {
 			emailExist.mockResolvedValue([true, null])
 
 			const res = await request(app).post('/api/v1/register').send({
-				email: 'emailExist',
+				email: 'exampleExist@example.com',
 				password: 'password'
 			})
 
 			expect(emailExist.mock.calls.length).toBe(1)
 			expect(res.statusCode).toBe(409)
-			expect(res.body.message).toBe('email already exist')
+			expect(res.body.message).toBe('Email already exist')
 		})
 
 		test('should return 400 status code if email or password data are invalid', async () => {
@@ -51,12 +51,12 @@ describe('POST /api/v1/register', () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, 'error'])
 			const res = await request(app).post('/api/v1/register').send({
-				email: 'email',
+				email: 'example@example.com',
 				password: 'password'
 			})
 
 			expect(res.statusCode).toBe(500)
-			expect(res.body.message).toBe('Email or password are invalid')
+			expect(res.body.message).toBe('Something went wrong')
 			expect(res.body.debug).toBe('Database failed when trying to insert a new user')
 		})
 		
@@ -70,6 +70,18 @@ describe('POST /api/v1/register', () => {
 
 			expect(res.statusCode).toBe(400)
 			expect(res.body.message).toBe('Missing data')
+		})
+	})
+
+	describe('Given no database', () => {
+		test('should return 500 status code database is offline', async () => {
+
+			const res = await request(makeApp()).post('/api/v1/register').send({
+			})
+
+			expect(res.statusCode).toBe(500)
+			expect(res.body.message).toBe('Something went wrong')
+			expect(res.body.debug).toBe('Database is offline or not connected')
 		})
 	})
 })
