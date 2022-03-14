@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { home } from '../controllers/home'
+import { register } from '../controllers/register'
 
 export default (database) => {
 	const app = Router()
 
-	app.get('/api/v1/auth', home(database))
+	app.post('/api/v1/register', register(database))
 	
 	return app
 }
