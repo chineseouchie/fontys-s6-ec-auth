@@ -1,14 +1,14 @@
 
-import { json200, json400, json409, json500 } from '../response/json'
-import { isValidEmail } from '../utils/util'
-import bcrypt from 'bcrypt'
+import { json200, json400, json409, json500 } from "../response/json"
+import { isValidEmail } from "../utils/utils"
+import bcrypt from "bcrypt"
 
 export function register(database) {
 	return async function(req, res) {
 		if (!database) {
 			return json500(
 				res,
-				'Database is offline or not connected'
+				"Database is offline or not connected"
 			)
 		}
 
@@ -17,14 +17,14 @@ export function register(database) {
 		if (!email || !password) {
 			return json400(
 				res,
-				'Missing data',
+				"Missing data",
 			)
 		}
 
 		if (!isValidEmail(email)) {
 			return json400(
 				res,
-				'Email or password are invalid'
+				"Email or password are invalid"
 			)
 		}
 
@@ -32,13 +32,13 @@ export function register(database) {
 		if (error1) {
 			return json500(
 				res,
-				'Somethign went wrong while checking if email exist',
+				"Something went wrong while checking if email exist",
 			)
 		}
 		if (emailExist) {
 			return json409(
 				res,
-				'Email already exist',
+				"Email already exist",
 			)
 		}
 
@@ -47,7 +47,7 @@ export function register(database) {
 		if (error2) {
 			return json500(
 				res,
-				'Database failed when trying to insert a new user',
+				"Database failed when trying to insert a new user",
 			)
 		}
 
@@ -57,6 +57,6 @@ export function register(database) {
 
 		
 
-		return json200(res, 'Register success', null)
+		return json200(res, "Register success", null)
 	}
 }

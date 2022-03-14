@@ -1,6 +1,6 @@
-import makeApp from './app'
-import * as database from './services/db'
-import 'dotenv/config'
+import makeApp from "./app"
+import * as database from "./services/db"
+import "dotenv/config"
 
 const app = makeApp(database)
 const port = process.env.PORT || 3001

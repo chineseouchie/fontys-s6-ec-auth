@@ -1,21 +1,21 @@
 module.exports = {
-	'env': {
-		'es2021': true,
-		'node': true,
-		'jest/globals': true
+	"env": {
+		"es2021": true,
+		"node": true,
+		"jest/globals": true
 	},
-	'extends': 'eslint:recommended',
-	'parserOptions': {
-		'ecmaVersion': 'latest',
-		'sourceType': 'module'
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": "latest",
+		"sourceType": "module"
 	},
-	'rules': {
-		'indent': [
-			'error',
-			'tab'
+	"rules": {
+		"indent": [
+			"error",
+			"tab"
 		],
-		'quotes': ['error', 'single', { 'allowTemplateLiterals': true }],
-		'no-unused-vars': ['warn', { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }],
+		"quotes": ["error", "double", { "allowTemplateLiterals": true }],
+		"no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }],
 	},
-	'plugins': ['jest']
+	"plugins": ["jest"]
 }
