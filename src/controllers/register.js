@@ -1,7 +1,7 @@
-
 import { json200, json400, json409, json500 } from "../response/json"
 import { isValidEmail } from "../utils/utils"
 import bcrypt from "bcrypt"
+import { v4 as uuidv4} from "uuid"
 
 export function register(database) {
 	return async function(req, res) {
@@ -24,7 +24,7 @@ export function register(database) {
 		if (!isValidEmail(email)) {
 			return json400(
 				res,
-				"Email or password are invalid"
+				"Invalid email"
 			)
 		}
 
@@ -43,7 +43,7 @@ export function register(database) {
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10)
-		const [data, error2] = await database.register(email, hashedPassword)
+		const [data, error2] = await database.register(email, hashedPassword, uuidv4())
 		if (error2) {
 			return json500(
 				res,
@@ -51,11 +51,10 @@ export function register(database) {
 			)
 		}
 
+		// TODO send data to other microservices with rabbitmq
 		const userData = {
 			id: data.id,
 		}
-
-		
 
 		return json200(res, "Register success", null)
 	}

@@ -15,7 +15,7 @@ afterEach(() => {
 
 describe("POST /api/v1/register", () => {
 	describe("Given an email, password, name and address details", () => {
-		test.skip("should save the email and password to the database", async () => {
+		test("should save the email and password to the database", async () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, null])
 			
@@ -54,14 +54,14 @@ describe("POST /api/v1/register", () => {
 			expect(res.body.message).toBe("Something went wrong")
 		})
 
-		test("should return 400 status code if email or password data are invalid", async () => {
+		test("should return 400 status code if email is not valid", async () => {
 			const res = await request(app).post("/api/v1/register").send({
 				email: "em",
 				password: "password"
 			})
 
 			expect(res.statusCode).toBe(400)
-			expect(res.body.message).toBe("Email or password are invalid")
+			expect(res.body.message).toBe("Invalid email")
 		})
 
 		test("should return 500 status code when database failed", async () => {

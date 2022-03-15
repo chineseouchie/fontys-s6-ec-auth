@@ -1,6 +1,6 @@
 version: "3"
 services:
-  auth:
+  ec_auth:
     build:
       context: .
       args:
@@ -13,26 +13,28 @@ services:
       - ./:/app
       - /app/node_modules
     depends_on:
-      - auth_db
+      - ec_auth_db
     command: npm run dev
     networks:
       - ecommerce
-  auth_db:
+  ec_auth_db:
     image: mariadb:10.7
     ports:
       - 3306:3306
     restart: unless-stopped
     environment:
       - MARIADB_ROOT_PASSWORD=root
-      - MARIADB_DATABASE=auth_db
+      - MARIADB_DATABASE=ec_auth_db
       - MARIADB_USER=joey
       - MARIADB_PASSWORD=root
     volumes:
-      - auth_db:/var/lib/mysql
+      - ec_auth_db:/var/lib/mysql
       - ./schema/001.sql:/docker-entrypoint-initdb.d/001.sql
+    networks:
+      - ecommerce
   
 volumes:
-  auth_db:
+  ec_auth_db:
 
 networks:
   ecommerce:
