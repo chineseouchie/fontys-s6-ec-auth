@@ -89,16 +89,4 @@ describe("POST /api/v1/register", () => {
 			expect(res.body.message).toBe("Missing data")
 		})
 	})
-
-	describe("Given no database", () => {
-		test("should return 500 status code database is offline", async () => {
-
-			const res = await request(makeApp()).post("/api/v1/register").send({
-			})
-
-			expect(res.statusCode).toBe(500)
-			expect(res.body.message).toBe("Something went wrong")
-			expect(res.body.debug).toBe("Database is offline or not connected")
-		})
-	})
 })
