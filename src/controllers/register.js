@@ -21,8 +21,7 @@ export function register(database) {
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10)
-		const error2 = null
-		// const [data, error2] = await database.register(email, hashedPassword, uuidv4())
+		const [data, error2] = await database.register(email, hashedPassword, uuidv4())
 		if (error2) {
 			return json500(
 				res,
