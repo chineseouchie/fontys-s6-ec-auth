@@ -1,12 +1,19 @@
 import { json400 } from "../response/json"
-import { isValidEmail } from "../utils/utils"
+import { isValidEmail, isValidPassword } from "../utils/utils"
 
 export function validateRegister(req, res, next) {
-	const {email, password} = req.body
-	if (!email || !password) {
+	const {email, password, firstname, lastname} = req.body
+	if (!email) {
 		return json400(
 			res,
-			"Missing data",
+			"Missing email",
+		)
+	}
+
+	if (!password) {
+		return json400(
+			res,
+			"Missing password",
 		)
 	}
 
@@ -14,6 +21,27 @@ export function validateRegister(req, res, next) {
 		return json400(
 			res,
 			"Invalid email"
+		)
+	}
+
+	if (!isValidPassword(password)) {
+		return json400(
+			res,
+			"Invalid password"
+		)
+	}
+
+	if (!firstname) {
+		return json400(
+			res,
+			"Missing firstname"
+		)
+	}
+
+	if (!lastname) {
+		return json400(
+			res,
+			"Missing lastname"
 		)
 	}
 

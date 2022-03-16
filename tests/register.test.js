@@ -14,14 +14,16 @@ afterEach(() => {
 });
 
 describe("POST /api/v1/register", () => {
-	describe("Given an email, password, name and address details", () => {
+	describe("Given an email, password, firstname and lastname details", () => {
 		test("should save the email and password to the database", async () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, null])
 			
 			const res = await request(app).post("/api/v1/register").send({
 				email: "example@example.com",
-				password: "password"
+				password: "Password1!",
+				firstname: "firstname",
+				lastname: "lastname"
 			})
 
 			expect(register.mock.calls.length).toBe(1)
@@ -33,7 +35,9 @@ describe("POST /api/v1/register", () => {
 
 			const res = await request(app).post("/api/v1/register").send({
 				email: "exampleExist@example.com",
-				password: "password"
+				password: "Password1!",
+				firstname: "firstname",
+				lastname: "lastname"
 			})
 
 			expect(emailExist.mock.calls.length).toBe(1)
@@ -46,7 +50,9 @@ describe("POST /api/v1/register", () => {
 
 			const res = await request(app).post("/api/v1/register").send({
 				email: "exampleExist@example.com",
-				password: "password"
+				password: "Password1!",
+				firstname: "firstname",
+				lastname: "lastname"
 			})
 
 			expect(emailExist.mock.calls.length).toBe(1)
@@ -57,11 +63,25 @@ describe("POST /api/v1/register", () => {
 		test("should return 400 status code if email is not valid", async () => {
 			const res = await request(app).post("/api/v1/register").send({
 				email: "em",
-				password: "password"
+				password: "Password1!",
+				firstname: "firstname",
+				lastname: "lastname"
 			})
 
 			expect(res.statusCode).toBe(400)
 			expect(res.body.message).toBe("Invalid email")
+		})
+
+		test("should return 400 status code if password is not valid", async () => {
+			const res = await request(app).post("/api/v1/register").send({
+				email: "example@example.com",
+				password: "Password1",
+				firstname: "firstname",
+				lastname: "lastname"
+			})
+
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Invalid password")
 		})
 
 		test("should return 500 status code when database failed", async () => {
@@ -69,7 +89,9 @@ describe("POST /api/v1/register", () => {
 			register.mockResolvedValue([{}, "error"])
 			const res = await request(app).post("/api/v1/register").send({
 				email: "example@example.com",
-				password: "password"
+				password: "Password1!",
+				firstname: "firstname",
+				lastname: "lastname"
 			})
 
 			expect(res.statusCode).toBe(500)
@@ -80,13 +102,45 @@ describe("POST /api/v1/register", () => {
 	})
 
 	describe("Given no register data", () => {
-		test("should return 400 status code if missing data", async () => {
+		test("should return 400 status code if email missing", async () => {
 
 			const res = await request(app).post("/api/v1/register").send({
 			})
 
 			expect(res.statusCode).toBe(400)
-			expect(res.body.message).toBe("Missing data")
+			expect(res.body.message).toBe("Missing email")
+		})
+
+		test("should return 400 status code if password missing", async () => {
+
+			const res = await request(app).post("/api/v1/register").send({
+				email: "example@example.com"
+			})
+
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Missing password")
+		})
+
+		test("should return 400 status code if firstname missing", async () => {
+			const res = await request(app).post("/api/v1/register").send({
+				email: "example@example.com",
+				password: "Password1!",
+				lastname: "lastname",
+			})
+
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Missing firstname")
+		})
+
+		test("should return 400 status code if lastname missing", async () => {
+			const res = await request(app).post("/api/v1/register").send({
+				email: "example@example.com",
+				password: "Password1!",
+				firstname: "firstname"
+			})
+
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Missing lastname")
 		})
 	})
 })
