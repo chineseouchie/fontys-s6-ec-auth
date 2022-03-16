@@ -19,6 +19,12 @@ export function json400(res, message) {
 		timestamp: Date.now()
 	})
 }
+export function json401(res, message) {
+	return res.status(401).json({
+		message,
+		timestamp: Date.now()
+	})
+}
 export function json500(res, debug) {
 	return res.status(500).json({
 		message: "Something went wrong",
