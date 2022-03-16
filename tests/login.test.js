@@ -50,7 +50,26 @@ describe("POST /api/v1/login", () => {
 			expect(res.body.message).toBe("Invalid email")
 		})
 
-		
+		test("should return 500 status code if failed to get user from database", async () => {
+			findOneAuthByEmail.mockResolvedValue([{}, "error"])
+			const res = await request(app).post("/api/v1/login").send({
+				email: "example@example.com",
+				password: "Password12!",
+			})
+
+			expect(res.statusCode).toBe(500)
+			expect(res.body.message).toBe("Something went wrong")
+		})
+	})
+
+	describe("Given no email or password", () => {
+		test("should return 400 status code if email missing", () => {
+			
+		})
+
+		test("should return 400 status code if password missing", () => {
+
+		})
 	})
 
 	
