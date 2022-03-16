@@ -7,6 +7,11 @@ export function isValidEmail(email) {
 }
 
 export function isValidPassword(password) {
+	// Atleast:
+	// 8 character
+	// 1 letter
+	// 1 number
+	// 1 special character
 	const re = new RegExp(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/)
 	return password.match(re)
 }

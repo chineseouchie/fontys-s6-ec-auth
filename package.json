@@ -10,8 +10,7 @@
     "dev": "nodemon -L --exec babel-node src/index.js",
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && babel ./src -d dist",
-    "test": "jest",
-    "watch": "jest --watch"
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "",
