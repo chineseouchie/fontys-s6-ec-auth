@@ -9,8 +9,8 @@ const app = makeApp({
 	emailExist
 })
 
-afterEach(() => {
-	jest.clearAllMocks();
+afterEach(() => {    
+	jest.resetAllMocks();
 });
 
 describe("POST /api/v1/register", () => {
