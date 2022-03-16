@@ -42,3 +42,5 @@ export async function emailExist(email) {
 		return [null, e]
 	}
 }
+
+export async function findOneAuthByEmail(email){}
