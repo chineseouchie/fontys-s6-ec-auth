@@ -1,15 +1,17 @@
 import makeApp from "../src/app"
 import request from "supertest"
 import bcrypt from "bcrypt"
+import * as util from "../src/utils/utils"
 
 const findOneAuthByEmail = jest.fn()
 const spyCompare = jest.spyOn(bcrypt, "compare");
+const spyJwt = jest.spyOn(util, "generateToken");
 
 const app = makeApp({
 	findOneAuthByEmail,
 })
 
-afterEach(() => {    
+afterEach(() => {
 	jest.resetAllMocks();
 });
 
@@ -17,8 +19,9 @@ describe("POST /api/v1/login", () => {
 	describe("Given email and password", () => {
 		test("should return JWT when login credentials are valid", async () => {
 			spyCompare.mockResolvedValue(true)
-			findOneAuthByEmail.mockResolvedValue([{email: "", hashedPassword:"Password1!"}, null])
-			
+			spyJwt.mockResolvedValue("testUID")
+			findOneAuthByEmail.mockResolvedValue([{ email: "", hashedPassword: "Password1!", uuid: "uuidtest" }, null])
+
 			const res = await request(app).post("/api/v1/login").send({
 				email: "example@example.com",
 				password: "Password1!",
@@ -30,7 +33,7 @@ describe("POST /api/v1/login", () => {
 		})
 
 		test("should return 401 status code if login credentials are not correct", async () => {
-			findOneAuthByEmail.mockResolvedValue([{email: "", hashedPassword:"test"}, null])
+			findOneAuthByEmail.mockResolvedValue([{ email: "", hashedPassword: "test" }, null])
 			const res = await request(app).post("/api/v1/login").send({
 				email: "example@example.com",
 				password: "Password12!",
@@ -64,7 +67,7 @@ describe("POST /api/v1/login", () => {
 
 	describe("Given no email or password", () => {
 		test("should return 400 status code if email missing", () => {
-			
+
 		})
 
 		test("should return 400 status code if password missing", () => {
@@ -72,5 +75,5 @@ describe("POST /api/v1/login", () => {
 		})
 	})
 
-	
+
 })
