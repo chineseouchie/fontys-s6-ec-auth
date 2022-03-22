@@ -15,14 +15,14 @@ connection.getConnection();
 export async function register(email, password, uuid) {
 	try {
 		const sql = `INSERT INTO auth(email, password, uuid) VALUES(?,?,?)`
-		const [rows, ] = await connection.query(sql, [email, password, uuid])
+		const [rows,] = await connection.query(sql, [email, password, uuid])
 
 		const data = {
 			id: rows.insertId
 		}
 
 		return [data, null]
-	} catch(e) {
+	} catch (e) {
 		return [null, e]
 	}
 
@@ -31,16 +31,16 @@ export async function register(email, password, uuid) {
 export async function emailExist(email) {
 	try {
 		const sql = "SELECT COUNT(email) AS user_count FROM auth WHERE email = ?"
-		const [rows, ] = await connection.query(sql, [email])
+		const [rows,] = await connection.query(sql, [email])
 		if (rows[0].user_count >= 1) {
 			return [true, null]
 		}
 
 		return [false, null]
-	} catch(e) {
+	} catch (e) {
 		console.error(e)
 		return [null, e]
 	}
 }
 
-export async function findOneAuthByEmail(email){}
+export async function findOneAuthByEmail(email) { }
