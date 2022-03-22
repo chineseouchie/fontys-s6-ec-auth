@@ -27,6 +27,7 @@ cleanup:
   stage: test
   script:
     - docker rmi $PROJECT
+  need: ["lint", "test"]
 
 deploy:
   stage: deploy
