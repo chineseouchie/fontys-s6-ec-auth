@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - tempDeploy
   - deploy
 
 variables:
@@ -28,6 +29,13 @@ cleanup:
   script:
     - docker rmi $PROJECT
   needs: ["lint", "test"]
+
+
+deployDatabase:
+  stage: tempDeploy
+  script:
+    - mkctl apply -f mysql-pv.yaml
+    - mkctl apply -f mysql-deployment.yaml
 
 deploy:
   stage: deploy
