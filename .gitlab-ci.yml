@@ -7,28 +7,28 @@ stages:
 variables:
   PROJECT: ci-ec-auth
 
-build:
-  stage: build
-  script:
-    - docker build -t $PROJECT .
+# build:
+#   stage: build
+#   script:
+#     - docker build -t $PROJECT .
 
-lint:
-  stage: test
-  script:
-    - docker run -l $PROJECT $PROJECT sh -c "npm run ci-lint"
-    - docker container prune --filter label=$PROJECT -f
+# lint:
+#   stage: test
+#   script:
+#     - docker run -l $PROJECT $PROJECT sh -c "npm run ci-lint"
+#     - docker container prune --filter label=$PROJECT -f
 
-test:
-  stage: test
-  script:
-    - docker run -l $PROJECT $PROJECT sh -c "npm run ci-test"
-    - docker container prune --filter label=$PROJECT -f
+# test:
+#   stage: test
+#   script:
+#     - docker run -l $PROJECT $PROJECT sh -c "npm run ci-test"
+#     - docker container prune --filter label=$PROJECT -f
 
-cleanup:
-  stage: test
-  script:
-    - docker rmi $PROJECT
-  needs: ["lint", "test"]
+# cleanup:
+#   stage: test
+#   script:
+#     - docker rmi $PROJECT
+#   needs: ["lint", "test"]
 
 
 deployDatabase:
