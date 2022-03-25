@@ -31,10 +31,4 @@ kind: StorageClass
 metadata:
   name: mariadb-pv-volume
 provisioner: kubernetes.io/no-provisioner
-parameters:
-  type: gp2
-reclaimPolicy: Delete
-allowVolumeExpansion: true
-mountOptions:
-  - debug
 volumeBindingMode: Immediate
