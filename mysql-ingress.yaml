@@ -8,8 +8,8 @@ spec:
   - host: test.com
     http:
       paths:
-      - backend:
-        pathType: ImplementationSpecific
+      - pathType: ImplementationSpecific
+        backend:
           service:
             name: mysql
             port:
