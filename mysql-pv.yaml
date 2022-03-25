@@ -10,13 +10,14 @@ spec:
     storage: 5Gi
   accessModes:
     - ReadWriteOnce
+  volumeMode: Filesystem
   hostPath:
     path: "/mnt/data"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mariadb-pv-claim
+  name: mariadb-pvc-claim
 spec:
   storageClassName: mariadb-pv-volume 
   accessModes:
