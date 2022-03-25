@@ -34,9 +34,11 @@ cleanup:
 deployDatabase:
   stage: tempDeploy
   script:
-    - microk8s kubectl apply -f persistence_volume.yaml
     - microk8s kubectl apply -f mysql-pv.yaml
+    - microk8s kubectl apply -f mysql-pvc.yaml
     - microk8s kubectl apply -f mysql-deployment.yaml
+    - microk8s kubectl apply -f mysql-service.yaml
+
 
 deploy:
   stage: deploy
