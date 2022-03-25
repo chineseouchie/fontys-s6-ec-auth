@@ -8,6 +8,6 @@ spec:
   - host: test.com
     http:
       paths:
-      - backends:
+      - backend:
           serviceName: mysql
           servicePort: 3306
