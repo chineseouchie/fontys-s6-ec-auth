@@ -5,7 +5,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: manual
+  storageClassName: slow
   capacity:
     storage: 20Gi
   accessModes:
@@ -18,7 +18,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mariadb-pv-claim
 spec:
-  storageClassName: manual
+  storageClassName: slow
   accessModes:
     - ReadWriteOnce
   resources:
