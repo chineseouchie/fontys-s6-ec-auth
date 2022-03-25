@@ -5,6 +5,7 @@ metadata:
   labels:
     type: local
 spec:
+  storageClassName: standard
   capacity:
     storage: 20Gi
   accessModes:
@@ -17,6 +18,7 @@ kind: PersistentVolumeClaim
 metadata:
   name: mariadb-pv-claim
 spec:
+  storageClassName: standard
   accessModes:
     - ReadWriteOnce
   resources:
