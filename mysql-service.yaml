@@ -5,9 +5,9 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-  - port: 3306
+  - name: mysql-service
+    protocol: TCP
+    port: 3306
     targetPort: 3306
-    nodePort: 30000
-  clusterIP: 10.0.171.239
   selector:
     app: mysql
