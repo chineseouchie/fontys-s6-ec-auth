@@ -9,5 +9,5 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: mysql
-          servicePort: 3306
+          name: mysql
+          port: 3306
