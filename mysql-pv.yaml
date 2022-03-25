@@ -6,7 +6,7 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: mariadb-pv-volume
+  storageClassName: manual
   capacity:
     storage: 5Gi
   accessModes:
