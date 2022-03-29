@@ -4,6 +4,7 @@ metadata:
   name: ec-auth-mysql-pv
   labels:
     type: local
+  finalizers: null
 spec:
   storageClassName: manual
   capacity:

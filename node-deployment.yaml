@@ -23,7 +23,7 @@ spec:
           - name: MYSQL_USER
             value: joey
           - name: MYSQL_PASSWORD
-            value: ec_auth_db
+            value: root
           - name: MYSQL_DATABASE
             value: ec_auth_db
           - name: JWT_SECRET
