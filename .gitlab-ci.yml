@@ -1,38 +1,38 @@
 stages:
   - build
   - test
-  - tempDeploy
   - deploy
 
 variables:
   PROJECT: ci-ec-auth
 
-# build:
-#   stage: build
-#   script:
-#     - docker build -t $PROJECT .
+build:
+  stage: build
+  script:
+    - docker build -t $PROJECT .
 
-# lint:
-#   stage: test
-#   script:
-#     - docker run -l $PROJECT $PROJECT sh -c "npm run ci-lint"
-#     - docker container prune --filter label=$PROJECT -f
+lint:
+  stage: test
+  script:
+    - docker run -l $PROJECT $PROJECT sh -c "npm run ci-lint"
+    - docker container prune --filter label=$PROJECT -f
 
-# test:
-#   stage: test
-#   script:
-#     - docker run -l $PROJECT $PROJECT sh -c "npm run ci-test"
-#     - docker container prune --filter label=$PROJECT -f
+test:
+  stage: test
+  script:
+    - docker run -l $PROJECT $PROJECT sh -c "npm run ci-test"
+    - docker container prune --filter label=$PROJECT -f
 
-# cleanup:
-#   stage: test
-#   script:
-#     - docker rmi $PROJECT
-#   needs: ["lint", "test"]
+cleanup:
+  stage: test
+  script:
+    - docker rmi $PROJECT
+  needs: ["lint", "test"]
 
-
-deployDatabase:
-  stage: tempDeploy
+deployDocker:
+  stage: deploy
+  only:
+      - production
   before_script:
     - docker login -u $CI_REGISTRY_USER -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
@@ -43,7 +43,7 @@ deployDatabase:
   after_script:
     - docker logout
 
-deploy:
+deployK8s:
   stage: deploy
   only:
       - production
