@@ -4,7 +4,6 @@ import "dotenv/config"
 
 async function init() {
 	await database.init()
-	console.log("test")
 }
 
 init()
