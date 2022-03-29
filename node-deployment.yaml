@@ -11,6 +11,9 @@ spec:
     spec:
       containers:
       - name: ec-auth
+        image: joeyfontys/s6-ec-auth
+          ports:
+          - containerPort: 3001
         env:
           - name: MYSQL_HOST
             value: ec-auth-mysql
@@ -26,6 +29,4 @@ spec:
             value: 1h
           - name: PORT
             value: 3001
-      image: joeyfontys/s6-ec-auth
-      ports:
-      - containerPort: 3001
+          
