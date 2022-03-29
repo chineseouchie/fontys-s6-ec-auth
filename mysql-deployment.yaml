@@ -40,7 +40,8 @@ spec:
             - name: ec-auth-mysql-persistent-storage
               mountPath: /var/lib/mysql
             - name: ec-auth-mysql-initdb
-              mountPath: /docker-entrypoint-initdb.d/init.sql
+              mountPath: /docker-entrypoint-initdb.d
+              type: File
       volumes:
         - name: ec-auth-mysql-persistent-storage
           persistentVolumeClaim:
