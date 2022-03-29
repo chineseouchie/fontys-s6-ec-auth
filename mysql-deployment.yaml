@@ -54,4 +54,4 @@ kind: ConfigMap
 metadata:
   name: ec-auth-mysql-initdb-config
 data:
-  init.sql: ./schema/001.sql
+  init.sql: /schema/001.sql
