@@ -40,6 +40,7 @@ deployDatabase:
     # - microk8s kubectl apply -f persistence_volume.yaml
     - microk8s kubectl apply -f mysql-service.yaml
     # - microk8s kubectl apply -f mysql-ingress.yaml
+    - microk8s kubectl apply -f node-deployment.yaml
 
 
 deploy:

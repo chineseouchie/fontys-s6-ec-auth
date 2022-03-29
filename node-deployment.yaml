@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ec-auth-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: ec-auth
+    spec:
+      containers:
+      - name: ec-auth
+        env:
+          - name: MYSQL_HOST
+            value: ec-auth-mysql
+          - name: MYSQL_USER
+            value: joey
+          - name: MYSQL_PASSWORD
+            value: ec_auth_db
+          - name: MYSQL_DATABASE
+            value: ec_auth_db
+          - name: JWT_SECRET
+            value: Very_Secret_Key
+          - name: JWT_EXPIRE
+            value: 1h
+          - name: PORT
+            value: 3001
+      image: joeyfontys/s6-ec-auth
+      ports:
+      - containerPort: 3001

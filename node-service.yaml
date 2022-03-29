@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ec-auth-mysql
+  name: ec-auth
 spec:
   ports:
     - protocol: TCP
-      port: 3306
-      targetPort: 3306
-      nodePort: 31000
+      port: 3001
+      targetPort: 3001
+      nodePort: 30001
   type: LoadBalancer
   selector:
-    app: ec-auth-mysql
+    app: ec-auth
