@@ -42,7 +42,7 @@ deployDatabase:
     # - microk8s kubectl apply -f mysql-ingress.yaml
     - microk8s kubectl apply -f node-deployment.yaml
     - microk8s kubectl apply -f node-service.yaml
-    # - microk8s kubectl rollout restart deployment ec-auth-deployment
+    - microk8s kubectl rollout restart deployment ec-auth-deployment
 
 
 deploy:
