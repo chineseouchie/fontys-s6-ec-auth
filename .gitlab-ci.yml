@@ -41,6 +41,7 @@ deployDatabase:
     - microk8s kubectl apply -f mysql-service.yaml
     # - microk8s kubectl apply -f mysql-ingress.yaml
     - microk8s kubectl apply -f node-deployment.yaml
+    - microk8s kubectl apply -f node-service.yaml
 
 
 deploy:
