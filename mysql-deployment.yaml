@@ -39,7 +39,19 @@ spec:
           volumeMounts:
             - name: ec-auth-mysql-persistent-storage
               mountPath: /var/lib/mysql
+            - name: ec-auth-mysql-initdb
+              mountPath: /docker-entrypoint-initdb.d
       volumes:
         - name: ec-auth-mysql-persistent-storage
           persistentVolumeClaim:
             claimName: ec-auth-mysql-pv-claim
+        - name: ec-auth-mysql-initdb
+          configMap:
+            claimName: ec-auth-mysql-initdb-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ec-auth-mysql-initdb
+data:
+  init.sql: ./schema/001.sql
