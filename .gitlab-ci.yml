@@ -34,14 +34,14 @@ variables:
 deployDatabase:
   stage: tempDeploy
   script:
-    - microk8s kubectl apply -f /k8s/mysql-pv.yaml
-    - microk8s kubectl apply -f  /k8s/mysql-pvc.yaml
-    - microk8s kubectl apply -f  /k8s/mysql-deployment.yaml
-    # - microk8s kubectl apply -f  /k8s/persistence_volume.yaml
-    - microk8s kubectl apply -f  /k8s/mysql-service.yaml
-    # - microk8s kubectl apply -f  /k8s/mysql-ingress.yaml
-    - microk8s kubectl apply -f  /k8s/node-deployment.yaml
-    - microk8s kubectl apply -f  /k8s/node-service.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-pv.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-pvc.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-deployment.yaml
+    # - microk8s kubectl apply -f ./k8s/persistence_volume.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-service.yaml
+    # - microk8s kubectl apply -f ./k8s/mysql-ingress.yaml
+    - microk8s kubectl apply -f ./k8s/node-deployment.yaml
+    - microk8s kubectl apply -f ./k8s/node-service.yaml
     - microk8s kubectl rollout restart deployment ec-auth-deployment
 
 
