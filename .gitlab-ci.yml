@@ -55,3 +55,4 @@ deployK8s:
     - microk8s kubectl apply -f ./k8s/node-deployment.yaml
     - microk8s kubectl apply -f ./k8s/node-service.yaml
     - microk8s kubectl rollout restart deployment ec-auth-deployment
+  needs: ["deployDocker"]
