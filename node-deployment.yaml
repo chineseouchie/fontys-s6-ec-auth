@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: ec-auth
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -15,6 +15,11 @@ spec:
       containers:
       - name: ec-auth
         image: joeyfontys/s6-ec-auth
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
         ports:
         - containerPort: 3001
         env:
