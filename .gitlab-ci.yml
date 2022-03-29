@@ -33,22 +33,24 @@ variables:
 
 deployDatabase:
   stage: tempDeploy
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - microk8s kubectl apply -f ./k8s/mysql-pv.yaml
-    - microk8s kubectl apply -f ./k8s/mysql-pvc.yaml
-    - microk8s kubectl apply -f ./k8s/mysql-deployment.yaml
-    # - microk8s kubectl apply -f ./k8s/persistence_volume.yaml
-    - microk8s kubectl apply -f ./k8s/mysql-service.yaml
-    # - microk8s kubectl apply -f ./k8s/mysql-ingress.yaml
-    - microk8s kubectl apply -f ./k8s/node-deployment.yaml
-    - microk8s kubectl apply -f ./k8s/node-service.yaml
-    - microk8s kubectl rollout restart deployment ec-auth-deployment
-
+    - docker build -t "$PROJECT:$CI_COMMIT_REF_SLUG" .
+    - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG"
+    - docker rmi "$PROJECT:$CI_COMMIT_REF_SLUG"
+  after_script:
+    - docker logout
 
 deploy:
   stage: deploy
   only:
       - production
   script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    - microk8s kubectl apply -f ./k8s/mysql-pv.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-pvc.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-deployment.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-service.yaml
+    - microk8s kubectl apply -f ./k8s/node-deployment.yaml
+    - microk8s kubectl apply -f ./k8s/node-service.yaml
+    - microk8s kubectl rollout restart deployment ec-auth-deployment
