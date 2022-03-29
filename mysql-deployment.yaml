@@ -47,7 +47,7 @@ spec:
             claimName: ec-auth-mysql-pv-claim
         - name: ec-auth-mysql-initdb
           configMap:
-            claimName: ec-auth-mysql-initdb-config
+            name: ec-auth-mysql-initdb-config
 ---
 apiVersion: v1
 kind: ConfigMap
