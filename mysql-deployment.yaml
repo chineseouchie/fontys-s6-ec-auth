@@ -1,30 +1,29 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: mysql
-  namespace: mysql
+  name: ec-auth-mysql
   labels:
-    name: mysql
+    name: ec-auth-mysql
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mysql
+  name: ec-auth-mysql
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: ec-auth-mysql
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: ec-auth-mysql
     spec:
       containers:
         - image: mysql:8.0
-          name: mysql
+          name: ec-auth-mysql
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: root
@@ -36,11 +35,11 @@ spec:
               value: root
           ports:
             - containerPort: 3306
-              name: mysql
+              name: ec-auth-mysql
           volumeMounts:
-            - name: mysql-persistent-storage
+            - name: ec-auth-mysql-persistent-storage
               mountPath: /var/lib/mysql
       volumes:
-        - name: mysql-persistent-storage
+        - name: ec-auth-mysql-persistent-storage
           persistentVolumeClaim:
-            claimName: mysql-pv-claim
+            claimName: ec-auth-mysql-pv-claim
