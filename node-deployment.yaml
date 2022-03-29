@@ -3,6 +3,9 @@ kind: Deployment
 metadata:
   name: ec-auth-deployment
 spec:
+  selector:
+    matchLabels:
+      app: ec-auth
   replicas: 2
   template:
     metadata:
