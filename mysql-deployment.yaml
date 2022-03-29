@@ -52,6 +52,6 @@ spec:
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: ec-auth-mysql-initdb
+  name: ec-auth-mysql-initdb-config
 data:
   init.sql: ./schema/001.sql
