@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise"
 import "dotenv/config"
+import fs from "fs"
 
 const connection = mysql.createPool({
 	host: process.env.MYSQL_HOST,
@@ -11,6 +12,17 @@ const connection = mysql.createPool({
 })
 
 connection.getConnection();
+
+export async function init() {
+	try {
+		const sql = fs.readFileSync("./schema/002.sql").toString();
+		
+		await connection.query(sql)
+
+	} catch (e) {
+		throw Error(e)
+	}
+}
 
 export async function register(email, password, uuid) {
 	try {
@@ -43,4 +55,14 @@ export async function emailExist(email) {
 	}
 }
 
-export async function findOneAuthByEmail(email) { }
+export async function findOneAuthByEmail(email) {
+	try {
+		const sql = "SELECT * FROM auth WHERE email = ?"
+		const [rows,] = await connection.query(sql, [email])
+
+		return [rows[0], null]
+	} catch (e) {
+		console.error(e)
+		return [null, e]
+	}
+}

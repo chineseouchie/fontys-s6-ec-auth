@@ -10,7 +10,7 @@ export default function login(database) {
 		if (error1) {
 			return json500(res, "Failed to get email from the database")
 		}
-		const isSamePassword = await bcrypt.compare(password, user.hashedPassword)
+		const isSamePassword = await bcrypt.compare(password, user.password)
 
 		if (!isSamePassword) {
 			return json401(

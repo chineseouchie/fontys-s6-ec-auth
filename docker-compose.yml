@@ -29,7 +29,7 @@ services:
       - MARIADB_PASSWORD=root
     volumes:
       - ec_auth_db:/var/lib/mysql
-      - ./schema/001.sql:/docker-entrypoint-initdb.d/001.sql
+      - ./schema/002.sql:/docker-entrypoint-initdb.d/002.sql
     networks:
       - ecommerce
   
