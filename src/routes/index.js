@@ -7,7 +7,7 @@ export default (database) => {
 	const app = Router()
 
 	app.post(
-		"/api/v1/register",
+		"/api/v1/auth/register",
 		validateEmail,
 		validatePassword, 
 		validateUser, 
@@ -15,7 +15,7 @@ export default (database) => {
 	)
 
 	app.post(
-		"/api/v1/login",
+		"/api/v1/auth/login",
 		validateEmail,
 		validatePassword,
 		login(database)

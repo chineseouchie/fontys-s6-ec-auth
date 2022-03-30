@@ -13,13 +13,13 @@ afterEach(() => {
 	jest.resetAllMocks();
 });
 
-describe("POST /api/v1/register", () => {
+describe("POST /api/v1/auth/register", () => {
 	describe("Given an email, password, firstname and lastname details", () => {
 		test("should save the email and password to the database", async () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, null])
 			
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "example@example.com",
 				password: "Password1!",
 				firstname: "firstname",
@@ -33,7 +33,7 @@ describe("POST /api/v1/register", () => {
 		test("should return 409 status code if email already exist", async () => {
 			emailExist.mockResolvedValue([true, null])
 
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "exampleExist@example.com",
 				password: "Password1!",
 				firstname: "firstname",
@@ -48,7 +48,7 @@ describe("POST /api/v1/register", () => {
 		test("should return 500 status code if email check failed", async () => {
 			emailExist.mockResolvedValue([true, "error"])
 
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "exampleExist@example.com",
 				password: "Password1!",
 				firstname: "firstname",
@@ -61,7 +61,7 @@ describe("POST /api/v1/register", () => {
 		})
 
 		test("should return 400 status code if email is not valid", async () => {
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "em",
 				password: "Password1!",
 				firstname: "firstname",
@@ -73,7 +73,7 @@ describe("POST /api/v1/register", () => {
 		})
 
 		test("should return 400 status code if password is not valid", async () => {
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "example@example.com",
 				password: "Password1",
 				firstname: "firstname",
@@ -87,7 +87,7 @@ describe("POST /api/v1/register", () => {
 		test("should return 500 status code when database failed", async () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, "error"])
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "example@example.com",
 				password: "Password1!",
 				firstname: "firstname",
@@ -104,7 +104,7 @@ describe("POST /api/v1/register", () => {
 	describe("Given no register data", () => {
 		test("should return 400 status code if email missing", async () => {
 
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 			})
 
 			expect(res.statusCode).toBe(400)
@@ -113,7 +113,7 @@ describe("POST /api/v1/register", () => {
 
 		test("should return 400 status code if password missing", async () => {
 
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "example@example.com"
 			})
 
@@ -122,7 +122,7 @@ describe("POST /api/v1/register", () => {
 		})
 
 		test("should return 400 status code if firstname missing", async () => {
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "example@example.com",
 				password: "Password1!",
 				lastname: "lastname",
@@ -133,7 +133,7 @@ describe("POST /api/v1/register", () => {
 		})
 
 		test("should return 400 status code if lastname missing", async () => {
-			const res = await request(app).post("/api/v1/register").send({
+			const res = await request(app).post("/api/v1/auth/register").send({
 				email: "example@example.com",
 				password: "Password1!",
 				firstname: "firstname"
