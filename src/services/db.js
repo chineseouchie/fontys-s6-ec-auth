@@ -60,7 +60,12 @@ export async function findOneAuthByEmail(email) {
 		const sql = "SELECT * FROM auth WHERE email = ?"
 		const [rows,] = await connection.query(sql, [email])
 
-		return [rows[0], null]
+		if (rows.length >= 1 ){
+			return [rows[0], null]
+		} else {
+			return [null, null]
+
+		}
 	} catch (e) {
 		console.error(e)
 		return [null, e]

@@ -10,12 +10,15 @@ export default function login(database) {
 		if (error1) {
 			return json500(res, "Failed to get email from the database")
 		}
+		if (user === null) {
+			return json401(res, "Incorrect email or password")
+		}
 		const isSamePassword = await bcrypt.compare(password, user.password)
 
 		if (!isSamePassword) {
 			return json401(
 				res,
-				"Incorrect username or password"
+				"Incorrect email or password"
 			)
 		}
 

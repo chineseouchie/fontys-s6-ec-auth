@@ -15,14 +15,14 @@ afterEach(() => {
 	jest.resetAllMocks();
 });
 
-describe("POST /api/v1/login", () => {
+describe("POST /api/v1/auth/login", () => {
 	describe("Given email and password", () => {
 		test("should return JWT when login credentials are valid", async () => {
 			spyCompare.mockResolvedValue(true)
 			spyJwt.mockResolvedValue("testUID")
 			findOneAuthByEmail.mockResolvedValue([{ email: "", hashedPassword: "Password1!", uuid: "uuidtest" }, null])
 
-			const res = await request(app).post("/api/v1/login").send({
+			const res = await request(app).post("/api/v1/auth/login").send({
 				email: "example@example.com",
 				password: "Password1!",
 			})
@@ -33,18 +33,18 @@ describe("POST /api/v1/login", () => {
 		})
 
 		test("should return 401 status code if login credentials are not correct", async () => {
-			findOneAuthByEmail.mockResolvedValue([{ email: "", hashedPassword: "test" }, null])
-			const res = await request(app).post("/api/v1/login").send({
+			findOneAuthByEmail.mockResolvedValue([{ email: "example@example.com", hashedPassword: "test" }, null])
+			const res = await request(app).post("/api/v1/auth/login").send({
 				email: "example@example.com",
 				password: "Password12!",
 			})
 
 			expect(res.statusCode).toBe(401)
-			expect(res.body.message).toBe("Incorrect username or password")
+			expect(res.body.message).toBe("Incorrect email or password")
 		})
 
-		test.skip("should return 400 status code if email is not valid", async () => {
-			const res = await request(app).post("/api/v1/login").send({
+		test("should return 400 status code if email is not valid", async () => {
+			const res = await request(app).post("/api/v1/auth/login").send({
 				email: "em",
 				password: "Password1!",
 			})
@@ -55,7 +55,7 @@ describe("POST /api/v1/login", () => {
 
 		test("should return 500 status code if failed to get user from database", async () => {
 			findOneAuthByEmail.mockResolvedValue([{}, "error"])
-			const res = await request(app).post("/api/v1/login").send({
+			const res = await request(app).post("/api/v1/auth/login").send({
 				email: "example@example.com",
 				password: "Password12!",
 			})
@@ -65,15 +65,25 @@ describe("POST /api/v1/login", () => {
 		})
 	})
 
-	describe("Given no email or password", () => {
-		test("should return 400 status code if email missing", () => {
+	describe("Given no login data", () => {
+		test("should return 400 status code if email missing", async () => {
 
+			const res = await request(app).post("/api/v1/auth/login").send({
+			})
+
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Missing email")
 		})
 
-		test("should return 400 status code if password missing", () => {
+		test("should return 400 status code if password missing", async () => {
 
+			const res = await request(app).post("/api/v1/auth/login").send({
+				email: "example@example.com"
+			})
+
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Missing password")
 		})
 	})
-
 
 })
