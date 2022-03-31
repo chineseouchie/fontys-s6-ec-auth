@@ -1,17 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: mysql-ingress
-  
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+
+
 spec:
+  ingressClassName: nginx
   rules:
-  - host: test.com
-    http:
+  - http:
       paths:
-      - path: /mysql
+      - path: /?(.*)
         pathType: Prefix
         backend:
           service:
-            name: mysql
+            name: ec-fr-customer
             port:
-              number: 3306
+              number: 80
+      - path: /(api/.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: ec-auth
+            port:
+              number: 3001
