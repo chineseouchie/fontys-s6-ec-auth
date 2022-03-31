@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ec-auth-deployment
+  labels:
+    app: ec-auth
 spec:
   selector:
     matchLabels:
