@@ -1,11 +1,11 @@
 import makeApp from "./app"
 import * as database from "./services/db"
 import "dotenv/config"
-import { validateUser } from "./services/rabbitmq"
+import * as rabbitmq from "./services/rabbitmq"
 
 async function init() {
 	await database.init()
-	await validateUser()
+	await rabbitmq.validateUser()
 }
 
 init()
