@@ -1,12 +1,15 @@
 import makeApp from "./app"
 import * as database from "./services/db"
 import "dotenv/config"
+import { validateUser } from "./services/rabbitmq"
 
 async function init() {
 	await database.init()
+	await validateUser()
 }
 
 init()
+
 const app = makeApp(database)
 const port = process.env.PORT || 3001
 
