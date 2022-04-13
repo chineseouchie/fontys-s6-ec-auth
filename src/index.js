@@ -5,7 +5,7 @@ import * as rabbitmq from "./services/rabbitmq"
 
 async function init() {
 	await database.init()
-	await rabbitmq.validateUser()
+	await rabbitmq.init(database)
 }
 
 init()
