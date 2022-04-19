@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt"
 import { json200, json401, json500 } from "../response/json"
-import { generateToken } from "../utils/utils"
+import * as jwt from "../utils/jwt"
 
 export default function login(database) {
 	return async function (req, res) {
@@ -26,7 +26,7 @@ export default function login(database) {
 			res,
 			"Login success",
 			{
-				jwt: generateToken(user)
+				jwt: jwt.generateToken(user)
 			}
 		)
 	}

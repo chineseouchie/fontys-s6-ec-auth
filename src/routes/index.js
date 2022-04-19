@@ -1,7 +1,7 @@
 import { Router } from "express";
 import login from "../controllers/login";
 import { register } from "../controllers/register"
-import { validateEmail, validatePassword, validateUser } from "../validations/register";
+import { validateEmail, validatePassword, validateUser } from "../middlewares/register";
 
 export default (database) => {
 	const app = Router()
