@@ -15,20 +15,20 @@ afterEach(() => {
 
 describe("POST /api/v1/auth/register", () => {
 	describe("Given an email, password, firstname and lastname details", () => {
-		test("should save the email and password to the database", async () => {
-			emailExist.mockResolvedValue([false, null])
-			register.mockResolvedValue([{}, null])
+		// test("should save the email and password to the database", async () => {
+		// 	emailExist.mockResolvedValue([false, null])
+		// 	register.mockResolvedValue([{}, null])
 			
-			const res = await request(app).post("/api/v1/auth/register").send({
-				email: "example@example.com",
-				password: "Password1!",
-				firstname: "firstname",
-				lastname: "lastname"
-			})
+		// 	const res = await request(app).post("/api/v1/auth/register").send({
+		// 		email: "example@example.com",
+		// 		password: "Password1!",
+		// 		firstname: "firstname",
+		// 		lastname: "lastname"
+		// 	})
 
-			expect(register.mock.calls.length).toBe(1)
-			expect(res.statusCode).toBe(200)
-		})
+		// 	expect(register.mock.calls.length).toBe(1)
+		// 	expect(res.statusCode).toBe(200)
+		// })
 
 		test("should return 409 status code if email already exist", async () => {
 			emailExist.mockResolvedValue([true, null])
