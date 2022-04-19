@@ -1,10 +1,11 @@
 import { json200, json409, json500 } from "../response/json"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4} from "uuid"
+import userRegistered from "../services/rabbitmq"
 
 export function register(database) {
 	return async function(req, res) {
-		const {email, password} = req.body
+		const {email, password, firstname, lastname, street, city, province, country} = req.body
 
 		const [emailExist, error1] = await database.emailExist(email)
 		if (error1) {
@@ -20,8 +21,9 @@ export function register(database) {
 			)
 		}
 
+		const userUuid = uuidv4();
 		const hashedPassword = await bcrypt.hash(password, 10)
-		const [data, error2] = await database.register(email, hashedPassword, uuidv4())
+		const [data, error2] = await database.register(email, hashedPassword, userUuid)
 		if (error2) {
 			return json500(
 				res,
@@ -30,9 +32,12 @@ export function register(database) {
 		}
 
 		// TODO send data to other microservices with rabbitmq
-		// const userData = {
-		// 	id: data.id,
-		// }
+		const userData = {
+			user_uuid: userUuid,
+			firstname, lastname, street, city, province,country
+		}
+
+		await userRegistered(userData)
 
 		return json200(res, "Register success", null)
 	}
