@@ -8,10 +8,18 @@ const password = process.env.RABBITMQ_PASSWORD
 let channel
 
 export async function init() {
-	const conn = await amqp.connect(`amqp://${user}:${password}@${host}:5672`)
-	channel = await conn.createChannel()
+	console.log("Connecting with RabbitMQ...")
+	try {
+		const conn = await amqp.connect(`amqp://${user}:${password}@${host}:5672`)
+		channel = await conn.createChannel()
+		console.log("Connected with RabbitMQ")
 
-	validateUser()
+		validateUser()
+
+	} catch(e) {
+		console.log("Failed to connect with RabbitMQ")
+		console.log(e)
+	}
 }
 
 export async function validateUser() {
