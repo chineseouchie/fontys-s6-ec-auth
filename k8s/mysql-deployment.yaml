@@ -39,11 +39,11 @@ spec:
           volumeMounts:
             - name: ec-auth-mysql-persistent-storage
               mountPath: /var/lib/mysql
-          resources:
-            limits:
-              cpu: "100m"
-            requests:
-              cpu: "10m"
+          # resources:
+          #   limits:
+          #     cpu: "100m"
+          #   requests:
+          #     cpu: "10m"
 
 
       volumes:
