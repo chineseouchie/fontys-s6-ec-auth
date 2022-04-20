@@ -1,5 +1,5 @@
 import { json400 } from "../response/json"
-import { isValidEmail, isValidPassword } from "../utils/utils"
+import * as form from "../utils/form"
 
 export function validateEmail(req, res, next) {
 	const {email} = req.body
@@ -10,7 +10,7 @@ export function validateEmail(req, res, next) {
 		)
 	}
 
-	if (!isValidEmail(email)) {
+	if (!form.isValidEmail(email)) {
 		return json400(
 			res,
 			"Invalid email"
@@ -28,7 +28,7 @@ export function validatePassword(req, res, next) {
 		)
 	}	
 
-	if (!isValidPassword(password)) {
+	if (!form.isValidPassword(password)) {
 		return json400(
 			res,
 			"Invalid password"

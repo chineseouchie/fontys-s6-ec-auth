@@ -1,7 +1,7 @@
 import { json200, json409, json500 } from "../response/json"
 import bcrypt from "bcrypt"
 import { v4 as uuidv4} from "uuid"
-import userRegistered from "../services/rabbitmq"
+import * as rabbitmq from "../services/rabbitmq"
 
 export function register(database) {
 	return async function(req, res) {
@@ -37,7 +37,7 @@ export function register(database) {
 			firstname, lastname, street, city, province,country
 		}
 
-		await userRegistered(userData)
+		await rabbitmq.userRegistered(userData)
 
 		return json200(res, "Register success", null)
 	}

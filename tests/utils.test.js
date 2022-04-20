@@ -1,4 +1,4 @@
-import { isValidEmail } from "../src/utils/utils";
+import { isValidEmail } from "../src/utils/form";
 
 afterEach(() => {
 	jest.clearAllMocks();
