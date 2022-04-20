@@ -1,7 +1,7 @@
 import makeApp from "../src/app"
 import request from "supertest"
 import bcrypt from "bcrypt"
-import * as util from "../src/utils/utils"
+import * as util from "../src/utils/jwt"
 
 const findOneAuthByEmail = jest.fn()
 const spyCompare = jest.spyOn(bcrypt, "compare");
