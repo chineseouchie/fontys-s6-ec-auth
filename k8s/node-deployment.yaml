@@ -41,4 +41,10 @@ spec:
             value: 1h
           - name: PORT
             value: "3001"
+          - name: RABBITMQ_USER
+            value: joey
+          - name: RABBITMQ_PASSWORD
+            value: root
+          - name: RABBITMQ_HOST
+            value: ec-rabbitmq
           
