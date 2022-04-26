@@ -27,6 +27,7 @@ cleanup:
   stage: test
   script:
     - docker rmi $PROJECT
+    - docker image prune -f
   needs: ["lint", "test"]
 
 deployDocker:
@@ -40,6 +41,7 @@ deployDocker:
     - docker push "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
     - docker push "$CI_REGISTRY_IMAGE:latest"
     - docker rmi "$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA"
+    - docker image prune -f
   after_script:
     - docker logout
 
@@ -48,11 +50,9 @@ deployK8s:
   only:
       - production
   script:
-    - microk8s kubectl apply -f ./k8s/mysql-pv.yaml
-    - microk8s kubectl apply -f ./k8s/mysql-pvc.yaml
-    - microk8s kubectl apply -f ./k8s/mysql-deployment.yaml
-    - microk8s kubectl apply -f ./k8s/mysql-service.yaml
-    - microk8s kubectl apply -f ./k8s/node-deployment.yaml
-    - microk8s kubectl apply -f ./k8s/node-service.yaml
+    - microk8s kubectl apply -f ./k8s/mysql-deploy.yaml
+    - microk8s kubectl apply -f ./k8s/node-deploy.yaml
     - microk8s kubectl rollout restart deployment ec-auth-deployment
+    - docker container prune -f
+    - docker image prune -f
   needs: ["deployDocker"]

@@ -53,7 +53,7 @@ export async function validateUser() {
 	})
 }
 
-export default async function userRegistered(userData) {
+export async function userRegistered(userData) {
 	const ex = "ex_auth_register"
 	
 	await channel.assertExchange(ex,"topic", {durable: false})
