@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ec-auth-mysql-pv
+  labels:
+    type: local
+  finalizers: null
+spec:
+  storageClassName: standard
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ec-auth-mysql-pv-claim
+spec:
+  storageClassName: standard
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ec-auth-mysql
+spec:
+  selector:
+    matchLabels:
+      app: ec-auth-mysql
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ec-auth-mysql
+    spec:
+      containers:
+        - image: mysql:8.0
+          name: ec-auth-mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: ec_auth_db
+            - name: MYSQL_USER
+              value: joey
+            - name: MYSQL_PASSWORD
+              value: root
+          ports:
+            - containerPort: 3306
+              name: ec-auth-mysql
+          volumeMounts:
+            - name: ec-auth-mysql-persistent-storage
+              mountPath: /var/lib/mysql
+          # resources:
+          #   limits:
+          #     cpu: "100m"
+          #   requests:
+          #     cpu: "10m"
+
+
+      volumes:
+        - name: ec-auth-mysql-persistent-storage
+          persistentVolumeClaim:
+            claimName: ec-auth-mysql-pv-claim
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ec-auth-mysql
+spec:
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 31000
+  type: LoadBalancer
+  selector:
+    app: ec-auth-mysql
