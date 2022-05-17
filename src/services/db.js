@@ -11,7 +11,7 @@ const connection = mysql.createPool({
 
 })
 
-connection.getConnection();
+// connection.getConnection();
 
 export async function init() {
 	try {
@@ -20,6 +20,7 @@ export async function init() {
 		await connection.query(sql)
 
 	} catch (e) {
+		console.log(e)
 		throw Error(e)
 	}
 }
