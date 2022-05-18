@@ -62,14 +62,9 @@ spec:
               name: ec-auth-mysql
           volumeMounts:
             - name: ec-auth-mysql-persistent-storage
-              mountPath: /var/lib/mysql
+              mountPath: /var/lib/mysql-ec-auth
             - name: ec-auth-db-configmap
               mountPath: /docker-entrypoint-initdb.d
-          # resources:
-          #   limits:
-          #     cpu: "100m"
-          #   requests:
-          #     cpu: "10m"
 
 
       volumes:
