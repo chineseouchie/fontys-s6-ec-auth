@@ -28,19 +28,13 @@ export async function createNewAccount(email, password, uuid) {
 		// Get corresponding role
 		let roleSql = ""
 		if (email == "admin@example.com") {
-			roleSql = `SELECT * FROM role WHERE name = "ADMIN"`;
+			roleSql = `SELECT * FROM role`;
 			const [role1] = await conn.query(roleSql)
+			const roleIds = role1.map(e => [rows.insertId, e.role_id])
 		
 			// Create user role 
-			const userRole1 = `INSERT INTO user_role(user_id, role_id) VALUES(${rows.insertId},${role1[0].role_id})`
-			await conn.query(userRole1)
-
-			roleSql = `SELECT * FROM role WHERE name = "EMPLOYEE"`;
-			const [role2] = await conn.query(roleSql)
-		
-			// Create user role 
-			const userRole2 = `INSERT INTO user_role(user_id, role_id) VALUES(${rows.insertId},${role2[0].role_id})`
-			await conn.query(userRole2)
+			const userRole1 = `INSERT INTO user_role(user_id, role_id) VALUES ?`
+			await conn.query(userRole1, [roleIds])
 		} else {
 			roleSql = `SELECT * FROM role WHERE name = "USER"`;
 			const [role] = await conn.query(roleSql)
