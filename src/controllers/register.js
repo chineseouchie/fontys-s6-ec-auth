@@ -9,6 +9,7 @@ export function register(database) {
 
 		const [emailExist, error1] = await database.emailExist(email)
 		if (error1) {
+			console.log(error1)
 			return json500(
 				res,
 				"Something went wrong while checking if email exist",
@@ -23,22 +24,23 @@ export function register(database) {
 
 		const userUuid = uuidv4();
 		const hashedPassword = await bcrypt.hash(password, 10)
-		const [data, error2] = await database.register(email, hashedPassword, userUuid)
+		const [error2] = await database.createNewAccount(email, hashedPassword, userUuid)
 		if (error2) {
+			console.log(error2)
 			return json500(
 				res,
 				"Database failed when trying to insert a new user",
 			)
 		}
 
-		// TODO send data to other microservices with rabbitmq
 		const userData = {
 			user_uuid: userUuid,
 			firstname, lastname, street, city, province,country
 		}
 
+		console.log("a")
 		await rabbitmq.userRegistered(userData)
-
+		console.log("b")
 		return json200(res, "Register success", null)
 	}
 }

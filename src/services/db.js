@@ -1,8 +1,7 @@
 import mysql from "mysql2/promise"
 import "dotenv/config"
-import fs from "fs"
 
-const connection = mysql.createPool({
+const pool = mysql.createPool({
 	host: process.env.MYSQL_HOST,
 	user: process.env.MYSQL_USER,
 	password: process.env.MYSQL_PASSWORD,
@@ -11,40 +10,48 @@ const connection = mysql.createPool({
 
 })
 
-// connection.getConnection();
-
 export async function init() {
-	try {
-		const sql = fs.readFileSync("./schema/002.sql").toString();
-		
-		await connection.query(sql)
 
-	} catch (e) {
-		console.log(e)
-		throw Error(e)
-	}
 }
 
-export async function register(email, password, uuid) {
+export async function createNewAccount(email, password, uuid) {
+	let conn = null;
+
 	try {
+		conn = await pool.getConnection()
+		await conn.beginTransaction()
+
+		// Create auth account
 		const sql = `INSERT INTO auth(email, password, uuid) VALUES(?,?,?)`
-		const [rows,] = await connection.query(sql, [email, password, uuid])
+		const [rows] = await conn.query(sql, [email, password, uuid])
 
-		const data = {
-			id: rows.insertId
+		// Get corresponding role
+		let roleSql = ""
+		if (email == "admin@example.com") {
+			roleSql = `SELECT * FROM role WHERE name = "ADMIN"`;
+		} else {
+			roleSql = `SELECT * FROM role WHERE name = "USER"`;
 		}
+		const [role] = await conn.query(roleSql)
+		
+		// Create user role 
+		const userRole = `INSERT INTO user_role(user_id, role_id) VALUES(${rows.insertId},${role[0].role_id})`
+		await conn.query(userRole)
 
-		return [data, null]
+		await conn.commit()
+		return [null]
 	} catch (e) {
-		return [null, e]
+		if (conn) await conn.rollback();
+		return [e]
+	} finally {
+		if (conn) conn.release();
 	}
-
 }
 
 export async function emailExist(email) {
 	try {
 		const sql = "SELECT COUNT(email) AS user_count FROM auth WHERE email = ?"
-		const [rows,] = await connection.query(sql, [email])
+		const [rows,] = await pool.query(sql, [email])
 		if (rows[0].user_count >= 1) {
 			return [true, null]
 		}
@@ -59,7 +66,7 @@ export async function emailExist(email) {
 export async function findOneAuthByEmail(email) {
 	try {
 		const sql = "SELECT * FROM auth WHERE email = ?"
-		const [rows,] = await connection.query(sql, [email])
+		const [rows,] = await pool.query(sql, [email])
 
 		if (rows.length >= 1 ){
 			return [rows[0], null]

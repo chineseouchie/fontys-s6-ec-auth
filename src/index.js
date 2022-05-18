@@ -15,7 +15,7 @@ Sentry.init({
 
   
 async function init() {
-	// await database.init()
+	await database.init()
 	await rabbitmq.init(database)
 }
 

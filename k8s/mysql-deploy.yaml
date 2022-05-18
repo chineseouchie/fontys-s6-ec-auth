@@ -98,7 +98,7 @@ kind: ConfigMap
 metadata:
   name: ec-auth-db-configmap
 data: 
-  mysql_usermgmt.sql: |-
+  mysql_auth.sql: |-
     CREATE TABLE IF NOT EXISTS auth(
       auth_id int(10) NOT NULL AUTO_INCREMENT,
       uuid varchar(255) NOT NULL,
