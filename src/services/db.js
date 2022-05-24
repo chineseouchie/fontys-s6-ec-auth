@@ -51,8 +51,9 @@ export async function createNewAccount(email, password, uuid) {
 			const userRole1 = `INSERT INTO user_role(user_id, role_id) VALUES ?`
 			await conn.query(userRole1, [roleIds])
 		} else {
-			roleSql = `SELECT * FROM role WHERE name = "USER"`;
+			roleSql = `SELECT * FROM role WHERE name = "CUSTOMER"`;
 			const [role] = await conn.query(roleSql)
+			console.log(role)
 			const userRole = `INSERT INTO user_role(user_id, role_id) VALUES(${rows.insertId},${role[0].role_id})`
 			await conn.query(userRole)
 		}
