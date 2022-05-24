@@ -1,5 +1,6 @@
 import mysql from "mysql2/promise"
 import "dotenv/config"
+import LogSpacing from "../utils/logging"
 
 const pool = mysql.createPool({
 	host: process.env.MYSQL_HOST,
@@ -11,7 +12,21 @@ const pool = mysql.createPool({
 })
 
 export async function init() {
+	try {
+		console.log("Connecting with database")
+		await pool.getConnection()
+		console.log("Connected with database")
+		LogSpacing()
+	} catch(e) {
+		console.log("Failed to connect with database")
+		console.log("Reconnecting in 5 seconds")
 
+		setTimeout(() => {
+			console.log("Reconnecting...")
+			LogSpacing()
+			init()
+		}, 5000);
+	}
 }
 
 export async function createNewAccount(email, password, uuid) {
