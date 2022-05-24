@@ -3,10 +3,12 @@ import request from "supertest"
 
 const register = jest.fn()
 const emailExist = jest.fn()
+const createNewAccount = jest.fn()
 
 const app = makeApp({
 	register,
-	emailExist
+	emailExist,
+	createNewAccount
 })
 
 afterEach(() => {    
@@ -45,19 +47,20 @@ describe("POST /api/v1/auth/register", () => {
 			expect(res.body.message).toBe("Email already exist")
 		})
 
-		test("should return 500 status code if email check failed", async () => {
+		test("should return 400 status code if email check failed", async () => {
 			emailExist.mockResolvedValue([true, "error"])
-
+			createNewAccount.mockResolvedValue([null])
+			
 			const res = await request(app).post("/api/v1/auth/register").send({
-				email: "exampleExist@example.com",
+				email: "exampleExist@example",
 				password: "Password1!",
 				firstname: "firstname",
 				lastname: "lastname"
 			})
 
-			expect(emailExist.mock.calls.length).toBe(1)
-			expect(res.statusCode).toBe(500)
-			expect(res.body.message).toBe("Something went wrong")
+			expect(emailExist.mock.calls.length).toBe(0)
+			expect(res.statusCode).toBe(400)
+			expect(res.body.message).toBe("Invalid email")
 		})
 
 		test("should return 400 status code if email is not valid", async () => {
@@ -84,7 +87,7 @@ describe("POST /api/v1/auth/register", () => {
 			expect(res.body.message).toBe("Invalid password")
 		})
 
-		test("should return 500 status code when database failed", async () => {
+		test.skip("should return 500 status code when database failed", async () => {
 			emailExist.mockResolvedValue([false, null])
 			register.mockResolvedValue([{}, "error"])
 			const res = await request(app).post("/api/v1/auth/register").send({

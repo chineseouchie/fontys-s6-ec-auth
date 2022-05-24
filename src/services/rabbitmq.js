@@ -5,6 +5,7 @@ import * as Sentry from "@sentry/node";
 
 // Importing @sentry/tracing patches the global hub for tracing to work.
 import "@sentry/tracing";
+import LogSpacing from "../utils/logging";
 
 const host = process.env.RABBITMQ_HOST
 const user = process.env.RABBITMQ_USER
@@ -20,7 +21,7 @@ export async function init() {
 		// conn.on("error", (err)=>{console.log(err, "failed")})
 		channel = await conn.createChannel()
 		console.log("Connected with RabbitMQ")
-
+		LogSpacing()
 		validateUser()
 
 	} catch(e) {
@@ -41,6 +42,7 @@ export async function init() {
 				console.log("Failed to reconnect with RabbitMQ.")				
 			}
 		}, 1000);
+		LogSpacing()
 	}
 }
 

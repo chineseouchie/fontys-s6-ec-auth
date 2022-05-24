@@ -4,11 +4,13 @@ import bcrypt from "bcrypt"
 import * as util from "../src/utils/jwt"
 
 const findOneAuthByEmail = jest.fn()
+const getRolesFromUser = jest.fn()
 const spyCompare = jest.spyOn(bcrypt, "compare");
 const spyJwt = jest.spyOn(util, "generateToken");
 
 const app = makeApp({
 	findOneAuthByEmail,
+	getRolesFromUser,
 })
 
 afterEach(() => {
@@ -21,6 +23,7 @@ describe("POST /api/v1/auth/login", () => {
 			spyCompare.mockResolvedValue(true)
 			spyJwt.mockResolvedValue("testUID")
 			findOneAuthByEmail.mockResolvedValue([{ email: "", hashedPassword: "Password1!", uuid: "uuidtest" }, null])
+			getRolesFromUser.mockResolvedValue([[{name:"role1"}], null])
 
 			const res = await request(app).post("/api/v1/auth/login").send({
 				email: "example@example.com",

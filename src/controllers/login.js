@@ -22,11 +22,19 @@ export default function login(database) {
 			)
 		}
 
+		const [roles, error2] = await database.getRolesFromUser(user.auth_id)
+		if (error2) {
+			console.log(error2)
+			return json500(res, "Failed to get roles")
+		}
+		
+		const rolesArr = roles.map(e => e.name)
+
 		return json200(
 			res,
 			"Login success",
 			{
-				jwt: jwt.generateToken(user)
+				jwt: jwt.generateToken(user, rolesArr)
 			}
 		)
 	}

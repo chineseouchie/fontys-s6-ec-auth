@@ -1,8 +1,8 @@
 import mysql from "mysql2/promise"
 import "dotenv/config"
-import fs from "fs"
+import LogSpacing from "../utils/logging"
 
-const connection = mysql.createPool({
+const pool = mysql.createPool({
 	host: process.env.MYSQL_HOST,
 	user: process.env.MYSQL_USER,
 	password: process.env.MYSQL_PASSWORD,
@@ -11,40 +11,67 @@ const connection = mysql.createPool({
 
 })
 
-// connection.getConnection();
-
 export async function init() {
 	try {
-		const sql = fs.readFileSync("./schema/002.sql").toString();
-		
-		await connection.query(sql)
+		console.log("Connecting with database")
+		await pool.getConnection()
+		console.log("Connected with database")
+		LogSpacing()
+	} catch(e) {
+		console.log("Failed to connect with database")
+		console.log("Reconnecting in 5 seconds")
 
-	} catch (e) {
-		console.log(e)
-		throw Error(e)
+		setTimeout(() => {
+			console.log("Reconnecting...")
+			LogSpacing()
+			init()
+		}, 5000);
 	}
 }
 
-export async function register(email, password, uuid) {
+export async function createNewAccount(email, password, uuid) {
+	let conn = null;
+
 	try {
+		conn = await pool.getConnection()
+		await conn.beginTransaction()
+
+		// Create auth account
 		const sql = `INSERT INTO auth(email, password, uuid) VALUES(?,?,?)`
-		const [rows,] = await connection.query(sql, [email, password, uuid])
+		const [rows] = await conn.query(sql, [email, password, uuid])
 
-		const data = {
-			id: rows.insertId
+		// Get corresponding role
+		let roleSql = ""
+		if (email == "admin@example.com") {
+			roleSql = `SELECT * FROM role`;
+			const [role1] = await conn.query(roleSql)
+			const roleIds = role1.map(e => [rows.insertId, e.role_id])
+		
+			// Create user role 
+			const userRole1 = `INSERT INTO user_role(user_id, role_id) VALUES ?`
+			await conn.query(userRole1, [roleIds])
+		} else {
+			roleSql = `SELECT * FROM role WHERE name = "USER"`;
+			const [role] = await conn.query(roleSql)
+			const userRole = `INSERT INTO user_role(user_id, role_id) VALUES(${rows.insertId},${role[0].role_id})`
+			await conn.query(userRole)
 		}
+		
 
-		return [data, null]
+		await conn.commit()
+		return [null]
 	} catch (e) {
-		return [null, e]
+		if (conn) await conn.rollback();
+		return [e]
+	} finally {
+		if (conn) conn.release();
 	}
-
 }
 
 export async function emailExist(email) {
 	try {
 		const sql = "SELECT COUNT(email) AS user_count FROM auth WHERE email = ?"
-		const [rows,] = await connection.query(sql, [email])
+		const [rows,] = await pool.query(sql, [email])
 		if (rows[0].user_count >= 1) {
 			return [true, null]
 		}
@@ -59,10 +86,30 @@ export async function emailExist(email) {
 export async function findOneAuthByEmail(email) {
 	try {
 		const sql = "SELECT * FROM auth WHERE email = ?"
-		const [rows,] = await connection.query(sql, [email])
+		const [rows,] = await pool.query(sql, [email])
 
 		if (rows.length >= 1 ){
 			return [rows[0], null]
+		} else {
+			return [null, null]
+
+		}
+	} catch (e) {
+		console.error(e)
+		return [null, e]
+	}
+}
+
+export async function getRolesFromUser(auth_id) {
+	try {
+		const sql = `SELECT r.name, r.role_id FROM role as r
+		INNER JOIN user_role AS ur ON r.role_id = ur.role_id
+		WHERE ur.USER_ID = ?;`
+
+		const [rows,] = await pool.query(sql, [auth_id])
+		
+		if (rows.length >= 1 ){
+			return [rows, null]
 		} else {
 			return [null, null]
 

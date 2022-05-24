@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 
-export function generateToken(user) {
+export function generateToken(user, roles) {
 	return jwt.sign(
 		{
-			uuid: user.uuid
+			uuid: user.uuid,
+			roles: roles
 		},
 		process.env.JWT_SECRET,
 		{
