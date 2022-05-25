@@ -1,6 +1,7 @@
 import mysql from "mysql2/promise"
 import "dotenv/config"
 import LogSpacing from "../utils/logging"
+import { v4 as uuidv4} from "uuid"
 
 const pool = mysql.createPool({
 	host: process.env.MYSQL_HOST,
@@ -29,7 +30,7 @@ export async function init() {
 	}
 }
 
-export async function createNewAccount(email, password, uuid) {
+export async function createNewAccount(email, password, uuid, user) {
 	let conn = null;
 
 	try {
@@ -58,6 +59,18 @@ export async function createNewAccount(email, password, uuid) {
 			await conn.query(userRole)
 		}
 		
+		const userSql = `INSERT INTO user(auth_id, user_uuid,firstname,lastname,street,city,province,country) VALUES(?,?,?,?,?,?,?,?)`
+		const [userRow] = await conn.query(userSql, [
+			rows.insertId,
+			uuidv4(),
+			user.firstname,
+			user.lastname,
+			user.street,
+			user.city,
+			user.province,
+			user.country,
+		])
+		console.log(userRow)
 
 		await conn.commit()
 		return [null]
@@ -111,6 +124,24 @@ export async function getRolesFromUser(auth_id) {
 		
 		if (rows.length >= 1 ){
 			return [rows, null]
+		} else {
+			return [null, null]
+
+		}
+	} catch (e) {
+		console.error(e)
+		return [null, e]
+	}
+}
+export async function getUserFromAuthUuid(uuid) {
+	try {
+		const sql = `SELECT  firstname, lastname, street, city, province, country FROM user as u 
+		INNER JOIN auth ON auth.auth_id = u.auth_id
+		WHERE auth.uuid = ?`
+
+		const [rows] = await pool.query(sql, [uuid])
+		if (rows.length >= 1 ){
+			return [rows[0], null]
 		} else {
 			return [null, null]
 
