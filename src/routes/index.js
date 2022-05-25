@@ -1,6 +1,8 @@
 import { Router } from "express";
 import login from "../controllers/login";
 import { register } from "../controllers/register"
+import user from "../controllers/user";
+import { isUser } from "../middlewares/auth";
 import { validateEmail, validatePassword, validateUser } from "../middlewares/register";
 
 export default (database) => {
@@ -19,6 +21,12 @@ export default (database) => {
 		validateEmail,
 		validatePassword,
 		login(database)
+	)
+
+	app.get(
+		"/api/v1/auth/me",
+		isUser,
+		user(database)
 	)
 	
 	return app
