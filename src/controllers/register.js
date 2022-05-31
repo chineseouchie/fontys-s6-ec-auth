@@ -39,9 +39,8 @@ export function register(database) {
 			firstname, lastname, street, city, province,country
 		}
 
-		console.log("a")
 		await rabbitmq.userRegistered(userData)
-		console.log("b")
+		
 		return json200(res, "Register success", null)
 	}
 }
