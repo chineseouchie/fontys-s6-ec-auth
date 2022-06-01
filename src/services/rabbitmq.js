@@ -33,12 +33,12 @@ export async function init() {
 				console.log(`Trying to reconnect with RabbitMQ. Attempt: #${attempt}`)
 				init()
 			} else {
-				const transaction = Sentry.startTransaction({
-					op: "RabbitMQ connection failed",
-					name: "ec-auth <--> rabbitmq",
-				});
-				Sentry.captureException(e)
-				transaction.finish()
+				// const transaction = Sentry.startTransaction({
+				// 	op: "RabbitMQ connection failed",
+				// 	name: "ec-auth <--> rabbitmq",
+				// });
+				// Sentry.captureException(e)
+				// transaction.finish()
 				console.log("Failed to reconnect with RabbitMQ.")				
 			}
 		}, 1000);

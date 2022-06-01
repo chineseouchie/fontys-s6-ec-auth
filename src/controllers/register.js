@@ -6,6 +6,7 @@ import * as rabbitmq from "../services/rabbitmq"
 export function register(database) {
 	return async function(req, res) {
 		const {email, password, firstname, lastname, street, city, province, country} = req.body
+		const user = {firstname, lastname, street, city, province, country}
 
 		const [emailExist, error1] = await database.emailExist(email)
 		if (error1) {
@@ -24,7 +25,7 @@ export function register(database) {
 
 		const userUuid = uuidv4();
 		const hashedPassword = await bcrypt.hash(password, 10)
-		const [error2] = await database.createNewAccount(email, hashedPassword, userUuid)
+		const [error2] = await database.createNewAccount(email, hashedPassword, userUuid, user)
 		if (error2) {
 			console.log(error2)
 			return json500(
@@ -38,9 +39,8 @@ export function register(database) {
 			firstname, lastname, street, city, province,country
 		}
 
-		console.log("a")
 		await rabbitmq.userRegistered(userData)
-		console.log("b")
+		
 		return json200(res, "Register success", null)
 	}
 }
