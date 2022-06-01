@@ -35,3 +35,10 @@ spec:
             name: ec-prod
             port:
               number: 3002
+      - path: /(api/v1/order/.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: ec-order
+            port:
+              number: 3003
