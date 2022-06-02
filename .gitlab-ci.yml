@@ -66,7 +66,7 @@ deployStagingK8s:
     - microk8s kubectl rollout restart deployment ec-auth-deployment
     - docker container prune -f
     - docker image prune -f
-  needs: ["deployDocker"]
+  needs: ["deployStagingDocker"]
 
 
 deployDocker:
