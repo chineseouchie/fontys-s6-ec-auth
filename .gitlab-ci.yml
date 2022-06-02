@@ -31,6 +31,8 @@ test:
 
 cleanup:
   stage: test
+  tags:
+    - stage
   script:
     - docker rmi $PROJECT
     - docker image prune -f
