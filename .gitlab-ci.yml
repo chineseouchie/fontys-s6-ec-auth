@@ -8,17 +8,23 @@ variables:
 
 build:
   stage: build
+  tags:
+    - stage
   script:
     - docker build -t $PROJECT .
 
 lint:
   stage: test
+  tags:
+    - stage
   script:
     - docker run -l $PROJECT $PROJECT sh -c "npm run ci-lint"
     - docker container prune --filter label=$PROJECT -f
 
 test:
   stage: test
+  tags:
+    - stage
   script:
     - docker run -l $PROJECT $PROJECT sh -c "npm run ci-test"
     - docker container prune --filter label=$PROJECT -f
